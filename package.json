@@ -1,0 +1,39 @@
+{
+  "name": "dsh-web-launcher",
+  "version": "1.0.0",
+  "description": "Cross-platform one-command launcher for the DeepSeek Harness Web UI.",
+  "type": "module",
+  "bin": {
+    "dsh": "bin/dsh.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "check": "node --check bin/dsh.js && node --check src/launcher.js",
+    "test": "node --test --test-isolation=none",
+    "test:coverage": "node --test --test-isolation=none --experimental-test-coverage",
+    "prepack": "npm run check && npm test"
+  },
+  "keywords": [
+    "deepseek",
+    "deepseek-harness",
+    "dsh",
+    "cli",
+    "launcher",
+    "cross-platform"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@deepseek-ai/dsh": "^0.1.0-rc.6"
+  }
+}

@@ -67,7 +67,7 @@ test('--launcher-version reads the package version', async () => {
 });
 
 test('the launcher executes the official entry without a platform shell', async () => {
-  const directory = await mkdtemp(join(tmpdir(), 'dsh-launcher-'));
+  const directory = await mkdtemp(join(tmpdir(), 'dsh-start-'));
   const fakeEntry = join(directory, 'fake-dsh.js');
   const resultPath = join(directory, 'result.json');
 

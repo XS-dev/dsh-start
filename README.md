@@ -1,4 +1,4 @@
-# dsh-web-launcher
+# dsh-start
 
 使用一个 `dsh` 命令，在 Windows、macOS 和 Linux 上启动 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) Web UI。
 
@@ -25,14 +25,14 @@ Node.js 版本要求与当前 DeepSeek Harness 保持一致。
 ### 从 GitHub 安装
 
 ```bash
-npm install --global github:<你的GitHub用户名>/dsh-web-launcher
+npm install --global github:XS-dev/dsh-start
 ```
 
 ### 克隆后安装
 
 ```bash
-git clone https://github.com/<你的GitHub用户名>/dsh-web-launcher.git
-cd dsh-web-launcher
+git clone https://github.com/XS-dev/dsh-start.git
+cd dsh-start
 npm ci
 npm install --global .
 ```
@@ -40,10 +40,10 @@ npm install --global .
 ### 未来发布到 npm 后安装
 
 ```bash
-npm install --global dsh-web-launcher
+npm install --global dsh-start
 ```
 
-如果 npm 上该包名已被占用，请先在 `package.json` 中换成自己的作用域包名，例如 `@your-name/dsh-web-launcher`。命令名仍然可以保持为 `dsh`。
+如果 npm 上该包名已被占用，请先在 `package.json` 中换成自己的作用域包名，例如 `@your-name/dsh-start`。命令名仍然可以保持为 `dsh`。
 
 ## 使用
 
@@ -99,7 +99,7 @@ GitHub Actions 会在 Windows、macOS、Ubuntu 以及 Node.js 22、24 上运行�
 ## 发布到 GitHub
 
 ```bash
-git remote add origin https://github.com/<你的GitHub用户名>/dsh-web-launcher.git
+git remote add origin https://github.com/XS-dev/dsh-start.git
 git push -u origin main
 ```
 

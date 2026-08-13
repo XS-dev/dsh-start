@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const require = createRequire(import.meta.url);
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
-export const LAUNCHER_HELP = `dsh-web-launcher
+export const LAUNCHER_HELP = `dsh-start
 
 Start the DeepSeek Harness Web UI with one command on Windows, macOS, or Linux.
 

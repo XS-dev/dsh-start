@@ -47,10 +47,27 @@ dsh --launcher-version
 
 ## Usage
 
-```bash
-# Start the Web UI on the default port
-dsh
+### Start and open the Web UI
 
+Run the launcher from the project directory you want Harness to use:
+
+```bash
+dsh
+```
+
+The default port is **3080**. When the terminal prints:
+
+```text
+dsh web: http://127.0.0.1:3080
+```
+
+open [http://127.0.0.1:3080](http://127.0.0.1:3080) in your browser. Keep the terminal running while using the Web UI, and press `Ctrl+C` when you want to stop the service.
+
+By default, the server listens on the local machine only. If you choose another port, open the same address with that port—for example, `dsh --port 8080` is available at [http://127.0.0.1:8080](http://127.0.0.1:8080).
+
+### More commands
+
+```bash
 # Start it on another port
 dsh --port 8080
 
@@ -69,8 +86,6 @@ dsh --dsh-raw --help
 # Show launcher-specific help
 dsh --launcher-help
 ```
-
-Press `Ctrl+C` to stop the Web UI.
 
 ### Command routing
 

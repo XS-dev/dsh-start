@@ -2,6 +2,14 @@
   "name": "dsh-start",
   "version": "1.0.0",
   "description": "Cross-platform one-command launcher for the DeepSeek Harness Web UI.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XS-dev/dsh-start.git"
+  },
+  "homepage": "https://github.com/XS-dev/dsh-start#readme",
+  "bugs": {
+    "url": "https://github.com/XS-dev/dsh-start/issues"
+  },
   "type": "module",
   "bin": {
     "dsh": "bin/dsh.js"
@@ -10,12 +18,15 @@
     "bin",
     "src",
     "README.md",
+    "README.zh-CN.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
     "LICENSE"
   ],
   "scripts": {
     "check": "node --check bin/dsh.js && node --check src/launcher.js",
-    "test": "node --test --test-isolation=none",
-    "test:coverage": "node --test --test-isolation=none --experimental-test-coverage",
+    "test": "node test/launcher.test.js",
+    "test:coverage": "node --experimental-test-coverage test/launcher.test.js",
     "prepack": "npm run check && npm test"
   },
   "keywords": [

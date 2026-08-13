@@ -1,118 +1,114 @@
 # dsh-start
 
-使用一个 `dsh` 命令，在 Windows、macOS 和 Linux 上启动 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) Web UI。
+[![CI](https://github.com/XS-dev/dsh-start/actions/workflows/ci.yml/badge.svg)](https://github.com/XS-dev/dsh-start/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/Node.js-22.19%2B%20%7C%2024%2B-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 
-本项目替代仅适用于 Windows 的 `dsh-web.cmd`。安装后由 npm 根据操作系统自动生成正确的命令入口，不需要分别维护 `.cmd`、PowerShell 和 Shell 脚本。
+English | [简体中文](README.zh-CN.md)
 
-## 功能
+Start the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) Web UI with a single `dsh` command on Windows, macOS, and Linux.
 
-- `dsh` 直接启动 Web UI。
-- 所有 Web UI 参数原样透传，例如端口和配置参数。
-- 兼容原来的显式写法 `dsh web ...`。
-- 保留官方 `plugin` 和 `--profile` 高级入口。
-- 不通过 Shell 拼接命令，避免 Windows、macOS、Linux 参数转义差异。
-- 运行目录会原样传给 Harness，因此可以在目标项目目录中直接执行 `dsh`。
+```console
+$ dsh
+dsh web: http://127.0.0.1:3080
+```
 
-## 环境要求
+> [!NOTE]
+> This is an independent community launcher and is not an official DeepSeek project.
 
-- Node.js `22.19.0+` 或 `24+`
+## Why dsh-start?
+
+The official CLI uses `dsh web` to launch the browser interface. `dsh-start` makes Web UI startup the default while preserving access to the official CLI's explicit commands.
+
+- Run `dsh` instead of `dsh web`.
+- Forward Web UI options without platform-specific quoting.
+- Keep `dsh web`, `dsh plugin`, and `dsh --profile` compatible.
+- Install the same executable on Windows, macOS, and Linux through npm.
+- Use the directory where `dsh` is invoked as the Harness workspace root.
+
+## Requirements
+
+- Node.js `^22.19.0` or `>=24.0.0`
 - npm
 
-Node.js 版本要求与当前 DeepSeek Harness 保持一致。
+## Install
 
-## 安装
-
-### 从 GitHub 安装
+Install the latest version directly from GitHub:
 
 ```bash
 npm install --global github:XS-dev/dsh-start
 ```
 
-### 克隆后安装
+Verify the launcher:
+
+```bash
+dsh --launcher-version
+```
+
+## Usage
+
+```bash
+# Start the Web UI on the default port
+dsh
+
+# Start it on another port
+dsh --port 8080
+
+# The official explicit form remains valid
+dsh web --port 8080
+
+# Manage plugins for an official profile
+dsh plugin --profile web list
+
+# Run another official profile
+dsh --profile headless "summarize this repository"
+
+# Forward arguments directly to the official CLI
+dsh --dsh-raw --help
+
+# Show launcher-specific help
+dsh --launcher-help
+```
+
+Press `Ctrl+C` to stop the Web UI.
+
+### Command routing
+
+| Input | Forwarded to DeepSeek Harness |
+|---|---|
+| `dsh` | `dsh web` |
+| `dsh --port 8080` | `dsh web --port 8080` |
+| `dsh web ...` | unchanged |
+| `dsh plugin ...` | unchanged |
+| `dsh --profile ...` | unchanged |
+| `dsh --dsh-raw ...` | arguments after `--dsh-raw` |
+
+## How it works
+
+The npm `bin` field creates the appropriate `dsh` executable for the host operating system. The launcher resolves the installed `@deepseek-ai/dsh` JavaScript entry point and starts it directly with Node.js. It does not construct a command through `cmd.exe`, PowerShell, or `/bin/sh`, avoiding shell-specific quoting behavior.
+
+## Security
+
+DeepSeek Harness can read and modify files in the selected workspace and execute commands subject to its permission policy. Start `dsh` from the project you intend to work on, verify the workspace shown in the Web UI, and review approval prompts before allowing sensitive operations.
+
+Keep API keys in the Harness model settings or another appropriate secret store. Never commit credentials to this repository or to a workspace used by an agent.
+
+## Development
 
 ```bash
 git clone https://github.com/XS-dev/dsh-start.git
 cd dsh-start
 npm ci
-npm install --global .
-```
-
-### 未来发布到 npm 后安装
-
-```bash
-npm install --global dsh-start
-```
-
-如果 npm 上该包名已被占用，请先在 `package.json` 中换成自己的作用域包名，例如 `@your-name/dsh-start`。命令名仍然可以保持为 `dsh`。
-
-## 使用
-
-```bash
-# 在当前项目目录启动，默认地址通常为 http://127.0.0.1:3080
-dsh
-
-# 指定端口
-dsh --port 8080
-
-# 与官方显式命令兼容
-dsh web --port 8080
-
-# 管理官方 profile 插件
-dsh plugin --profile web list
-
-# 使用其他官方 profile
-dsh --profile headless "summarize this repository"
-
-# 完全绕过默认 Web 路由，直接向官方 CLI 传参
-dsh --dsh-raw --help
-
-# 查看包装器帮助和版本
-dsh --launcher-help
-dsh --launcher-version
-```
-
-按 `Ctrl+C` 停止服务。
-
-## 工作原理
-
-`package.json` 将 `dsh` 注册为 npm 可执行命令。入口程序定位项目依赖中的 `@deepseek-ai/dsh`，然后使用当前 Node.js 进程直接运行其官方 JavaScript CLI：
-
-```text
-dsh [Web 参数]
-  └─ node <@deepseek-ai/dsh 官方入口> web [Web 参数]
-```
-
-因为没有通过 `cmd.exe`、PowerShell 或 `/bin/sh` 拼接参数，所以路径空格、引号及平台差异由 Node.js 统一处理。
-
-## 开发与验证
-
-```bash
-npm ci
 npm run check
 npm test
-npm run test:coverage
 npm pack --dry-run
 ```
 
-GitHub Actions 会在 Windows、macOS、Ubuntu 以及 Node.js 22、24 上运行检查。
+CI runs on Windows, macOS, and Ubuntu with Node.js 22 and 24.
 
-## 发布到 GitHub
+## Contributing
 
-```bash
-git remote add origin https://github.com/XS-dev/dsh-start.git
-git push -u origin main
-```
-
-如需发布到 npm：
-
-```bash
-npm login
-npm publish
-```
-
-## 安全说明
-
-DeepSeek Harness 可以读取和修改启动目录下的文件并执行命令。请从需要操作的项目目录启动，并在 Web UI 中核对工作区和审批策略。API 密钥应通过 Harness 的模型设置保存，不要写入本项目或提交到 Git。
+Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) before submitting a change.
 
 ## License
 

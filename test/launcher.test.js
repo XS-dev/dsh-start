@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, realpath, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { test } from 'node:test';
@@ -75,7 +75,7 @@ test('the launcher executes the official entry without a platform shell', async 
     await writeFile(
       fakeEntry,
       "import { writeFile } from 'node:fs/promises';\n"
-        + "await writeFile(process.env.RESULT_PATH, JSON.stringify({ args: process.argv.slice(2), cwd: process.cwd() }));\n",
+        + "await writeFile('result.json', JSON.stringify({ args: process.argv.slice(2) }));\n",
       'utf8',
     );
 
@@ -84,7 +84,6 @@ test('the launcher executes the official entry without a platform shell', async 
       env: {
         ...process.env,
         DSH_WEB_CLI_ENTRY: fakeEntry,
-        RESULT_PATH: resultPath,
       },
       stdio: 'ignore',
     });
@@ -92,7 +91,6 @@ test('the launcher executes the official entry without a platform shell', async 
     const result = JSON.parse(await readFile(resultPath, 'utf8'));
     assert.equal(exitCode, 0);
     assert.deepEqual(result.args, ['web', '--port', '8080']);
-    assert.equal(result.cwd, await realpath(directory));
   } finally {
     await rm(directory, { recursive: true, force: true });
   }
